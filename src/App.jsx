@@ -1,35 +1,95 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import StudentDetail from "./components/student/StudentDetail.jsx";
+import Student from "./components/Student.js";
+import Course from "./components/course/Course.js";
+import CourseDetail from "./components/course/CourseDetail.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [courses, setCourses] = useState([
+            new Course(1, "Introduction to React", "REACT101"),
+            new Course(2, "Advanced React", "REACT102"),
+            new Course(3, "JavaScript Fundamentals", "JS101"),
+            new Course(4, "Database Management", "DBMS101"),
+            new Course(5, "Software Engineering", "SE101")
+        ]
+    )
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    // Generate sample students with random data
+    const generateStudents = () => {
+        let students = [];
+        for (let i = 1; i <= 10; i++) {
+            let firstName = `Student${i}`;
+            let lastName = `LastName${i}`;
+            let email = `student${i}@example.com`;
+            let major = i % 2 === 0 ? "Computer Science" : "Electrical Engineering"; // Alternating majors
+            let gpa = parseFloat((Math.random() * (4.0 - 2.0) + 2.0).toFixed(2)); // Random GPA between 2.0 to 4.0
+            let coursesTaken = generateRandomCourses(5); // Generate 5 random courses for each student
+            students.push(new Student(i, firstName, lastName, email, major, gpa, coursesTaken));
+        }
+        return students;
+    };
+
+    // Helper function to generate random courses
+    const generateRandomCourses = (numCourses) => {
+        let randomCourses = [];
+        for (let i = 0; i < numCourses; i++) {
+            let randomIndex = Math.floor(Math.random() * courses.length);
+            randomCourses.push(courses[randomIndex]);
+        }
+        return randomCourses;
+    };
+
+    const [students, setStudents] = useState(generateStudents())
+
+
+    const onAddStudent = (student) => {
+        // TODO: Later
+    }
+    const onRemoveStudent = (id) => {
+        // TODO: Later
+    }
+    const onUpdateStudent = (id, student) => {
+        // TODO: Later
+    }
+
+    const onAddCourse = (course) => {
+        setCourses([...courses, course]);
+    }
+    const onRemoveCourse = (id) => {
+        setCourses(courses.filter(course => course.id !== id));
+    }
+
+    const onUpdateCourse = (id, updatedCourse) => {
+        setCourses(courses.map(course => (course.id === id ? updatedCourse : course)));
+    }
+
+
+    return (
+        <div className="container-fluid">
+            <h1>Students and Courses</h1>
+            <div className="row">
+                <StudentDetail students={students}
+                               onAddStudent={onAddStudent}
+                               onUpdateStudent={onUpdateStudent}
+                               onRemoveStudent={onRemoveStudent}
+                />
+                </div>
+
+            <hr/>
+
+            <div className="row">
+                <CourseDetail
+                    courses={courses}
+                    onAddCourse={onAddCourse}
+                    onRemoveCourse={onRemoveCourse}
+                    onUpdateCourse={onUpdateCourse}
+                />
+            </div>
+        </div>
+    )
 }
 
 export default App
