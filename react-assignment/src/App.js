@@ -1,24 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
+import Course from "./Course";
+import ToggleList from "./ToggleList";
 
+const courseList =[
+  {id:1 , courseName: 'WAP', credit: '400',courseCode:"CSS-420"},
+  {id:2 , courseName: 'WAA', credit: '500',courseCode:"CSS-520"},
+  {id:3 , courseName: 'EA', credit: '500',courseCode:"CSS-530"},
+  {id:4 , courseName: 'ASD', credit: '500',courseCode:"CSS-523"}
+]
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <ToggleList/>
+        <table>
+          {
+            courseList.map((item)=>{
+              return (
+                  <Course
+                      id={item.id}
+                      courseName={item.courseName}
+                      credit={item.credit}
+                      courseCode={item.courseCode}
+                  />
+              )
+            })
+          }
+        </table>
+      </div>
   );
 }
 
