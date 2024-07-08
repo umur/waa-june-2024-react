@@ -38,17 +38,6 @@ function App() {
     }
   ]);
 
-  const updatedStudent =
-  {
-    "id": 2,
-      "firstName": "Eddy Updated",
-      "lastName": "Jim",
-      "email": "eddy@jim.com",
-      "major": "IT",
-      "gpa": 4.0,
-      "coursesTaken": [courses[0]]
-  };
-
   return (
     <div className="App">
       <div>
