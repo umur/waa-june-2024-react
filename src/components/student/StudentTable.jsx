@@ -1,6 +1,6 @@
 import {StudentTableRow} from "../StudentTableRow.jsx";
 
-export default function StudentTable({props, students}) {
+export default function StudentTable({props, students, onDeleteStudent, onEditClicked}) {
 
     return (<>
         <table className="table table-bordered">
@@ -13,10 +13,14 @@ export default function StudentTable({props, students}) {
                 <th>Major</th>
                 <th>GPA</th>
                 <th>Courses Taken</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-                {students.map(student => <StudentTableRow student={student}/>)}
+            {students.map(student => <StudentTableRow key={"StudentTableRow" + student.id} student={student}
+                                                      onDeleteClicked={onDeleteStudent}
+            onEditClicked={onEditClicked}
+            />)}
             </tbody>
         </table>
 

@@ -20,7 +20,7 @@ function App() {
     // Generate sample students with random data
     const generateStudents = () => {
         let students = [];
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 5; i++) {
             let firstName = `Student${i}`;
             let lastName = `LastName${i}`;
             let email = `student${i}@example.com`;
@@ -46,13 +46,13 @@ function App() {
 
 
     const onAddStudent = (student) => {
-        // TODO: Later
+        setStudents([...students, student]);
     }
     const onRemoveStudent = (id) => {
-        // TODO: Later
+        setStudents(students.filter((student) => student.id !== id));
     }
-    const onUpdateStudent = (id, student) => {
-        // TODO: Later
+    const onUpdateStudent = (id, updatedStudent) => {
+        setStudents(students.map(student=> student.id===id?updatedStudent:student));
     }
 
     const onAddCourse = (course) => {
@@ -72,9 +72,10 @@ function App() {
             <h1>Students and Courses</h1>
             <div className="row">
                 <StudentDetail students={students}
+                               courses={courses}
                                onAddStudent={onAddStudent}
                                onUpdateStudent={onUpdateStudent}
-                               onRemoveStudent={onRemoveStudent}
+                               onDeleteStudent={onRemoveStudent}
                 />
                 </div>
 

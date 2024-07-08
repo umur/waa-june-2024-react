@@ -1,8 +1,6 @@
 import CourseTableRow from "./CourseTableRow.jsx";
 
 export default function CourseTable({courses, onEditClicked, onDeleteClicked}) {
-    console.log(onEditClicked)
-
     return <>
         <table className="table table-bordered">
             <thead>

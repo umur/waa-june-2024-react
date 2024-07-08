@@ -1,6 +1,6 @@
 
 
-export function StudentTableRow({props, student}) {
+export function StudentTableRow({props, student, onEditClicked, onDeleteClicked}) {
 
     return <>
         <tr>
@@ -16,6 +16,18 @@ export function StudentTableRow({props, student}) {
                         <li>{course.name} ({course.code})</li>
                     ))}
                 </ul>
+            </td>
+            <td>
+                <button className="btn btn-primary " onClick={() => {
+                    console.log(onEditClicked);
+                    onEditClicked(student);
+                }}>Edit
+                </button>
+                <button className="btn btn-danger m-1" onClick={() => {
+                    onDeleteClicked(student.id)
+                }
+                }>Delete
+                </button>
             </td>
         </tr>
     </>;

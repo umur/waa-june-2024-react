@@ -29,7 +29,7 @@ export default function CourseDetail({courses, onAddCourse, onRemoveCourse, onUp
     return (
         <div className="col-12">
             <h2>Courses</h2>
-            <div className="d-flex justify-content-start mb-3">
+            <div className="d-flex justify-content-end mb-3">
                 <Button variant="outline-primary" onClick={handleShow}>Add Course</Button>
             </div>
             <CourseTable
