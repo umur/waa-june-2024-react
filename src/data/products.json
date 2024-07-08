@@ -1,0 +1,7 @@
+
+[
+    { "id": 1, "name": "Laptop", "price": 1000, "rating": 4.5, "categoryId": 1 },
+    { "id": 2, "name": "Smartphone", "price": 800, "rating": 4.7, "categoryId": 1 },
+    { "id": 3, "name": "Novel", "price": 20, "rating": 4.0, "categoryId": 2 }
+  ]
+  

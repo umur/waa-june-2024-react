@@ -1,0 +1,5 @@
+[
+    { "id": 1, "street": "123 Main St", "zip": "12345", "city": "Somewhere", "userId": 1 },
+    { "id": 2, "street": "456 Elm St", "zip": "67890", "city": "Anywhere", "userId": 2 }
+  ]
+  
