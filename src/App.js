@@ -4,53 +4,47 @@ import AddStudentForm from "./AddStudentForm";
 import AddCourseForm from "./AddCourseForm";
 import StudentList from "./StudentList";
 import CourseList from "./CourseList";
+import axios from "axios";
 
 function App() {
     useEffect(() => {
         document.title = "Student and Course Management System";
     }, []);
-    const [students, setStudents] = useState([
-        {
-            id: 1,
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john.doe@example.com',
-            major: 'Computer Science',
-            gpa: 3.5,
-            coursesTaken: [
-                {id: 101, name: 'Intro to Computer Science', code: 'CS101'},
-                {id: 102, name: 'Data Structures', code: 'CS102'}
-            ]
-        },
-        {
-            id: 2,
-            firstName: 'Jane',
-            lastName: 'Smith',
-            email: 'john.smith@example.com',
-            major: 'Computer Science',
-            gpa: 3.0,
-            coursesTaken: [
-                {id: 101, name: 'Intro to Computer Science', code: 'CS101'},
-                {id: 102, name: 'Data Structures', code: 'CS102'}
-            ]
-        }
-    ]);
 
-    const [courses, setCourses] = useState([
-        {id: 101, name: 'Intro to Computer Science', code: 'CS101'},
-        {id: 102, name: 'Data Structures', code: 'CS102'},
-        {id: 103, name: 'Algorithms', code: 'CS103'},
-        {id: 104, name: 'Database Systems', code: 'CS104'}
-    ]);
+    const [students, setStudents] = useState([]);
+    const [courses, setCourses] = useState([]);
+
     const [selectedMajor, setSelectedMajor] = useState('');
 
     const handleAddStudent = (student) => {
-        setStudents([...students, {...student, id: Math.random()}]); // Random ID for example purposes
+        setStudents([...students, {...student, id: student.id}]);
     };
 
     const handleAddCourse = (course) => {
-        setCourses([...courses, {...course, id: Math.random()}]); // Random ID for example purposes
+        setCourses([...courses, {...course, id: course.id}]);
     };
+
+    const getStudents = async () => {
+        const response = await axios.get('http://localhost:8080/students');
+        console.log(response.data);
+        setStudents(response.data);
+
+    };
+
+    const getCourses = async () => {
+        const response = await axios.get('http://localhost:8080/courses');
+        console.log(response.data);
+        setCourses(response.data);
+    };
+
+    useEffect(() => {
+        getStudents();
+    }, []);
+
+    useEffect(() => {
+        getCourses();
+    }, []);
+
     return (
         <div className="App">
             <h1>Student and Course Management System</h1>

@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import axios from "axios";
 
 function AddCourseForm({onAddCourse}) {
     const [formData, setFormData] = useState({
@@ -20,6 +21,14 @@ function AddCourseForm({onAddCourse}) {
             alert('Please provide both the course name and code.');
             return;
         }
+        axios.post('http://localhost:8080/courses', {
+            name: formData.name,
+            code: formData.code
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        });
         onAddCourse({
             name: formData.name,
             code: formData.code

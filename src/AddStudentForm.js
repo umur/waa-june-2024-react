@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import axios from "axios";
 
 function AddStudentForm({onAddStudent}) {
     const [formData, setFormData] = useState({
@@ -21,6 +22,18 @@ function AddStudentForm({onAddStudent}) {
             alert('Please fill in all fields');
             return;
         }
+        axios.post('http://localhost:8080/students', {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            major: formData.major,
+            gpa: formData.gpa
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        });
+
         onAddStudent({
             ...formData,
             gpa: parseFloat(formData.gpa), // Convert GPA to a number
