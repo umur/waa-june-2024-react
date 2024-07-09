@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Course from './Course';
+import axios from "axios";
 
 export default function AddCourseForm({ show, handleClose, onAddCourse }) {
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
 
+    const callAddCourseAPI = async (newCourse ) =>{
+      await axios.post('/courses', newCourse);
+        onAddCourse();
+        handleCloseModal();
+    };
+
+    const resetForm = ()=>{
+        setName('');
+        setCode('');
+    }
+
+    const handleCloseModal = () => {
+        handleClose();
+        resetForm();
+    };
+
     const handleAddCourse = (event) => {
         event.preventDefault();
         if (name && code) {
-            const newCourse = new Course(Date.now(), name, code);
-            onAddCourse(newCourse);
-            handleClose();
+            const newCourse = new Course(Math.floor(Date.now()/1000), name, code);
+
+            callAddCourseAPI(newCourse);
+
         }
     };
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Add Course</Modal.Title>
             </Modal.Header>

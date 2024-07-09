@@ -4,15 +4,8 @@ import {Button} from "react-bootstrap";
 import {useState} from "react";
 import UpdateCourseForm from "./UpdateCourseForm.jsx";
 
-export default function CourseDetail({courses, onAddCourse, onRemoveCourse, onUpdateCourse}) {
-    const onAddPressed = () => {
-        const name = prompt("Enter course name:");
-        const code = prompt("Enter course code:");
-        if (name && code) {
-            const newCourse = new Course(courses.length + 1, name, code);
-            onAddCourse(newCourse);
-        }
-    };
+export default function CourseDetail({courses, onCourseChanged, onRemoveCourse}) {
+
 
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
@@ -26,8 +19,7 @@ export default function CourseDetail({courses, onAddCourse, onRemoveCourse, onUp
     };
     const handleCloseUpdate = () => setShowUpdate(false);
 
-    return (
-        <div className="col-12">
+    return (<div className="col-12">
             <h2>Courses</h2>
             <div className="d-flex justify-content-end mb-3">
                 <Button variant="outline-primary" onClick={handleShow}>Add Course</Button>
@@ -37,13 +29,12 @@ export default function CourseDetail({courses, onAddCourse, onRemoveCourse, onUp
                 onDeleteClicked={onRemoveCourse}
                 onEditClicked={handleShowUpdate}
             />
-            <AddCourseForm show={show} handleClose={handleClose} onAddCourse={onAddCourse} />
+            <AddCourseForm show={show} handleClose={handleClose} onAddCourse={onCourseChanged}/>
             <UpdateCourseForm
                 show={showUpdate}
                 handleClose={handleCloseUpdate}
-                onUpdateCourse={onUpdateCourse}
+                onUpdateCourse={onCourseChanged}
                 course={selectedCourse}
             />
-        </div>
-    );
+        </div>);
 }

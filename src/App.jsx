@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -6,60 +6,52 @@ import StudentDetail from "./components/student/StudentDetail.jsx";
 import Student from "./components/Student.js";
 import Course from "./components/course/Course.js";
 import CourseDetail from "./components/course/CourseDetail.jsx";
+import axios from "axios";
 
 function App() {
-    const [courses, setCourses] = useState([
-            new Course(1, "Introduction to React", "REACT101"),
-            new Course(2, "Advanced React", "REACT102"),
-            new Course(3, "JavaScript Fundamentals", "JS101"),
-            new Course(4, "Database Management", "DBMS101"),
-            new Course(5, "Software Engineering", "SE101")
-        ]
-    )
+    // set default url
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
-    // Generate sample students with random data
-    const generateStudents = () => {
-        let students = [];
-        for (let i = 1; i <= 5; i++) {
-            let firstName = `Student${i}`;
-            let lastName = `LastName${i}`;
-            let email = `student${i}@example.com`;
-            let major = i % 2 === 0 ? "Computer Science" : "Electrical Engineering"; // Alternating majors
-            let gpa = parseFloat((Math.random() * (4.0 - 2.0) + 2.0).toFixed(2)); // Random GPA between 2.0 to 4.0
-            let coursesTaken = generateRandomCourses(5); // Generate 5 random courses for each student
-            students.push(new Student(i, firstName, lastName, email, major, gpa, coursesTaken));
-        }
-        return students;
+
+    const [courses, setCourses] = useState([])
+    const [students, setStudents] = useState([])
+
+    const getAllStudents = async () => {
+        const result = await axios.get('/students');
+
+        setStudents(result.data);
     };
 
-    // Helper function to generate random courses
-    const generateRandomCourses = (numCourses) => {
-        let randomCourses = [];
-        for (let i = 0; i < numCourses; i++) {
-            let randomIndex = Math.floor(Math.random() * courses.length);
-            randomCourses.push(courses[randomIndex]);
-        }
-        return randomCourses;
+    const getAllCourses = async () => {
+        const result = await axios.get('/courses');
+
+        setCourses(result.data);
     };
 
-    const [students, setStudents] = useState(generateStudents())
+    const fetchDetails = ()=>{
+        getAllCourses();
+        getAllStudents();
+    };
+
+    useEffect(() => {
+       fetchDetails()
+    }, []);
 
 
-    const onAddStudent = (student) => {
-        setStudents([...students, student]);
-    }
-    const onRemoveStudent = (id) => {
-        setStudents(students.filter((student) => student.id !== id));
-    }
-    const onUpdateStudent = (id, updatedStudent) => {
-        setStudents(students.map(student=> student.id===id?updatedStudent:student));
+    const onRemoveStudent = async (id) => {
+       await axios.delete(`/students/${id}`);
+
+       getAllStudents();
     }
 
     const onAddCourse = (course) => {
         setCourses([...courses, course]);
     }
-    const onRemoveCourse = (id) => {
-        setCourses(courses.filter(course => course.id !== id));
+    const onRemoveCourse = async (id) => {
+        await axios.delete(`/courses/${id}`);
+
+        getAllCourses();
     }
 
     const onUpdateCourse = (id, updatedCourse) => {
@@ -73,11 +65,10 @@ function App() {
             <div className="row">
                 <StudentDetail students={students}
                                courses={courses}
-                               onAddStudent={onAddStudent}
-                               onUpdateStudent={onUpdateStudent}
+                               onStudentChanged={getAllStudents}
                                onDeleteStudent={onRemoveStudent}
                 />
-                </div>
+            </div>
 
             <hr/>
 
@@ -85,6 +76,7 @@ function App() {
                 <CourseDetail
                     courses={courses}
                     onAddCourse={onAddCourse}
+                    onCourseChanged={getAllCourses}
                     onRemoveCourse={onRemoveCourse}
                     onUpdateCourse={onUpdateCourse}
                 />

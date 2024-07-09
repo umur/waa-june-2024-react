@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
 import Student from "../Student.js";
+import axios from "axios";
 
 export default function EditStudentForm({ show, handleClose, onUpdateStudent, student, courses }) {
     const [firstName, setFirstName] = useState('');
@@ -31,15 +32,22 @@ export default function EditStudentForm({ show, handleClose, onUpdateStudent, st
         setSelectedCourses([]);
     };
 
+    const callEditStudentAPI = async (updatedStudent) =>{
+        await axios.put(`/students/${updatedStudent.id}`, updatedStudent);
+
+        handleClose();
+        resetForm();
+
+        onUpdateStudent();
+    }
+
     const handleUpdateStudent = (event) => {
         event.preventDefault();
         if (firstName && lastName && email && major && gpa) {
             const studentCourses = courses.filter((course) => selectedCourses.includes(course.id));
             const updatedStudent = new Student(student.id, firstName, lastName, email, major, parseFloat(gpa), studentCourses);
-            onUpdateStudent(student.id, updatedStudent);
-            console.log(updatedStudent);
-            handleClose();
-            resetForm();
+
+            callEditStudentAPI(updatedStudent);
         }
     };
 

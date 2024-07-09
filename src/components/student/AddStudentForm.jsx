@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
 import Student from "../Student.js";
+import axios from "axios";
 
 
 export default function AddStudentForm({ show, handleClose, onAddStudent, courses }) {
@@ -12,6 +13,17 @@ export default function AddStudentForm({ show, handleClose, onAddStudent, course
     const [gpa, setGpa] = useState('');
     const [selectedCourses, setSelectedCourses] = useState([]);
 
+    const callAddStudentAPI = async (newStudent)=>{
+        console.log(newStudent);
+
+        await axios.post('/students', newStudent);
+
+        handleClose();
+        resetForm();
+
+        onAddStudent();
+    }
+
     const resetForm = () => {
         setFirstName('');
         setLastName('');
@@ -21,16 +33,14 @@ export default function AddStudentForm({ show, handleClose, onAddStudent, course
         setSelectedCourses([]);
     };
 
-    const handleAddStudent = (event) => {
+    const handleAddStudent = (event)  => {
         event.preventDefault();
         if (firstName && lastName && email && major && gpa) {
             const studentCourses = courses.filter((course) => selectedCourses.includes(course.id));
 
-            const newStudent = new Student(Date.now(), firstName, lastName, email, major, parseFloat(gpa), studentCourses);
-            onAddStudent(newStudent);
-            console.log(newStudent);
-            handleClose();
-            resetForm();
+            const newStudent = new Student(Math.floor(Date.now() / 1000), firstName, lastName, email, major, parseFloat(gpa), studentCourses);
+            callAddStudentAPI(newStudent);
+
         }
     };
 

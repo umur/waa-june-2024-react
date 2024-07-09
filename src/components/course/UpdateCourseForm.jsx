@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import Course from './Course';
+import axios from "axios";
 
 export default function UpdateCourseForm({ show, handleClose, onUpdateCourse, course }) {
     const [name, setName] = useState('');
@@ -13,17 +14,33 @@ export default function UpdateCourseForm({ show, handleClose, onUpdateCourse, co
         }
     }, [course]);
 
+    const callUpdateCourseAPI = async (newCourse ) =>{
+        await axios.put(`/courses/${newCourse.id}`, newCourse);
+        onUpdateCourse();
+        handleCloseModal();
+    };
+
     const handleUpdateCourse = (event) => {
         event.preventDefault();
         if (name && code) {
             const updatedCourse = new Course(course.id, name, code);
-            onUpdateCourse(course.id, updatedCourse);
-            handleClose();
+            callUpdateCourseAPI(updatedCourse);
+
         }
     };
 
+    const resetForm = ()=>{
+        setName('');
+        setCode('');
+    }
+
+    const handleCloseModal = () => {
+        handleClose();
+        resetForm();
+    };
+
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleCloseModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Update Course</Modal.Title>
             </Modal.Header>
