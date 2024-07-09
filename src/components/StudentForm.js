@@ -10,7 +10,7 @@ const StudentForm = (props) => {
         email: '',
         major: '',
         gpa: '',
-        coursesTaken: [],
+        coursesTaken: '',
     };
 
     const [student, setStudent] = useState(defaultStudent);
