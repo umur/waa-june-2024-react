@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { createStudent, getCourses } from "../services/api";
+import React, { useState } from "react";
+import { createStudent } from "../services/api";
 
-const StudentForm = ({ fetchStudents }) => {
+const StudentForm = (props) => {
+    const { courses, fetchStudents } = props;
+
     const defaultStudent = {
         firstName: '',
         lastName: '',
@@ -12,11 +14,6 @@ const StudentForm = ({ fetchStudents }) => {
     };
 
     const [student, setStudent] = useState(defaultStudent);
-    const [courses, setCourses] = useState([]);
-
-    useEffect(() => {
-        fetchCourses();
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,11 +29,6 @@ const StudentForm = ({ fetchStudents }) => {
         setStudent(defaultStudent);
         fetchStudents();
     } 
-
-    const fetchCourses = async () => {
-        const result = await getCourses();
-        setCourses(result.data);
-    }
 
     return (
         <form onSubmit={handleSubmit}>

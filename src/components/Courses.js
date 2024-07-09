@@ -1,23 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { getCourses, deleteCourse } from "../services/api";
+import React from "react";
 import CourseForm from "./CourseForm";
 
-const Courses = () => {
-    const [courses, setCourses] = useState([]);
-
-    useEffect(() => {
-        fetchCourses();
-    }, []);
-
-    const fetchCourses = async () => {
-        const result = await getCourses();
-        setCourses(result.data);
-    }
-
-    const handleDelete = async (id) => {
-        await deleteCourse(id);
-        fetchCourses();
-    }
+const Courses = (props) => {
+const { courses, handleDelete, fetchCourses } = props;
 
     return (
         <div>

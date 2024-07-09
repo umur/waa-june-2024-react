@@ -1,23 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { getStudents, deleteStudent } from "../services/api";
+import React from "react";
 import StudentForm from "./StudentForm";
 
-const Students = () => {
-  const [students, setStudents] = useState([]);
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
-    const result = await getStudents();
-    setStudents(result.data);
-  };
-
-  const handleDelete = async (id) => {
-    await deleteStudent(id);
-    fetchStudents();
-  };
+const Students = (props) => {
+  const { courses, students, fetchStudents, handleDelete } = props;
 
   return (
     <div className="mb-2">
@@ -51,7 +36,7 @@ const Students = () => {
           ))}
         </tbody>
       </table>
-      <StudentForm fetchStudents={fetchStudents} />
+      <StudentForm courses={courses} fetchStudents={fetchStudents} />
     </div>
   );
 };
