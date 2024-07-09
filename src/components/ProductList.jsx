@@ -1,21 +1,31 @@
-import React from 'react';
-import products from '../data/products.json';
-import categories from '../data/categories.json';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const ProductList = () => {
-    const categoriesMap = {};
-    categories.forEach(category => {
-        categoriesMap[category.id] = category;
-    });
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        getProducts();
+    }, []);
+
+    const getProducts = async () => {
+        try {
+            const response = await axios.get('/products');
+            console.log(response.data);
+            setProducts(response.data);
+        } catch (error) {
+            console.error('getProducts: ', error);
+        }
+    };
+
     return (
         <div>
             <h2>Products</h2>
             <ul>
                 {products.map(product => {
-                    const category = categoriesMap[product.categoryId];
                     return (
                         <li key={product.id}>
-                            {product.name} - ${product.price} - {product.rating} stars - Category: {category ? category.name : 'Unknown'}
+                            {product.name} - ${product.price} - {product.rating} stars - Category: {product.category.name}
                         </li>
                     );
                 })}

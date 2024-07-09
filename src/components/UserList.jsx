@@ -1,24 +1,33 @@
-import React from 'react';
-import users from '../data/users.json';
-import addresses from '../data/addresses.json';
+import React, { useEffect, useState } from 'react';
 import Address from './Address';
+import axios from 'axios';
 
 const UserList = () => {
-    const addressMap = {};
-    addresses.forEach(address => {
-        addressMap[address.userId] = address;
-    });
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        getUsers();
+    }, []);
+
+    const getUsers = async () => {
+        try {
+            const response = await axios.get('/users');
+            // console.log(response);
+            setUsers(response.data);
+        } catch (error) {
+            console.error('getUsers: ', error);
+        }
+    }
+
     return (
         <div>
             <h2>Users</h2>
             <ul>
                 {users.map(user => {
-                    const address = addressMap[user.id];
                     return (
                         <li key={user.id}>
                             <div>Full name: {user.firstName} {user.lastName}</div>
                             <div>Email: {user.email}</div>
-                            <Address address={address}></Address>
+                            <Address address={user.address}></Address>
                         </li>
                     );
                 })}
