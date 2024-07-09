@@ -1,7 +1,20 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Constants from "../../Constants";
 
 function CourseTable(props) {
-    let [courses,setCourses]=useState([{id:1,name:"FPP",code:"FPP"},{id:2,name:"MPP",code:"MPP"},{id:3,name:"EA",code:"EA"},{id:4,name:"WAA",code:"WAA"},{id:5,name:"WAP",code:"WAP"},{id:6,name:"ASD",code:"ASD"}]);
+  useEffect(
+    ()=>{
+        getCourses();
+    }
+    ,[]);
+
+   async function getCourses(){
+    const resp=await axios.get(Constants.courses);
+    setCourses(resp.data);
+   } 
+
+   let [courses,setCourses]=useState([]);
 
    return (  
          <div className="container">

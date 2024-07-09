@@ -1,11 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputField from "../general/InputField";
 import MultiSelect from "../general/MultiSelect";
+import axios from "axios";
+import Constants from "../../Constants";
 
 
 function StudentForm() {
     let [student,setStudent]=useState({firstName:'',lastName:'',email:'',major:'',gpa:0.0,coursesTaken:[]});
-    const courses=[{id:1,name:"FPP",code:"FPP"},{id:2,name:"MPP",code:"MPP"},{id:3,name:"EA",code:"EA"},{id:4,name:"WAA",code:"WAA"},{id:5,name:"WAP",code:"WAP"},{id:6,name:"ASD",code:"ASD"}]
+
+    useEffect(
+        ()=>{
+            getCourses();
+        }
+        ,[]);
+    
+       async function getCourses(){
+        const resp=await axios.get(Constants.courses);
+        setCourses(resp.data);
+       } 
+       
+    let [courses,setCourses]=useState([]);
+    
 
     const handleChange = (event) =>{
         setStudent(student => (
@@ -20,14 +35,31 @@ function StudentForm() {
         setStudent(student => ({ ...student, coursesTaken: newValue }));
     }
 
-    const handleSubmit=(event)=>{
-        event.preventDefault();
-        console.log("State of student now",student);
-        validateFields();
+    function getCoursesTaken(courseIds) {
+        return courseIds.map(courseId => {
+            return courses.find(course => course.id == courseId);
+        });
     }
-    function validateFields(){
+       
 
-    }
+ 
+    async function addStudent(){
+        const resp=await axios.post(Constants.students,{...student,coursesTaken:getCoursesTaken(student.coursesTaken)});
+        if(resp.status==200){
+          setStudent({firstName:'',lastName:'',email:'',major:'',gpa:0.0,coursesTaken:[]});
+          alert("Save Success");
+        }
+        console.log("Creation response is:",resp.data);
+       } 
+  
+      const handleSubmit=(event)=>{
+        event.preventDefault();
+        if(student.firstName=='' || student.lastName=='' || student.email=='' || student.gpa=='' || student.major=='' || student.coursesTaken.length==0){
+          alert("Please fill in all the fields");
+          return;
+        }
+        addStudent();
+      }
 
     return ( 
         <div>
@@ -75,7 +107,7 @@ function StudentForm() {
              onChange={onCoursesChanged}
             />
 
-            <button 
+            <button  className="btn btn-primary"
             type="submit" >
             Submit
             </button>
