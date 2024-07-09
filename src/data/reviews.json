@@ -1,0 +1,5 @@
+[
+    { "id": 1, "comment": "Great product!", "userId": 1, "productId": 1 },
+    { "id": 2, "comment": "Really enjoyed this book.", "userId": 2, "productId": 3 }
+  ]
+  
