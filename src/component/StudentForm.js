@@ -18,6 +18,7 @@ const StudentForm = ({ addStudent, courses }) => {
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
+
     if (checked) {
       setStudent({
         ...student,
