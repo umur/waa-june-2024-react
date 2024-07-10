@@ -7,7 +7,6 @@ axios.defaults.baseURL = "http://localhost:8080";
 
 export const getAllCoursesApi = async () => {
   const response = await axios.get("/courses");
-  console.log(response.data);
   return response.data;
 };
 
@@ -33,7 +32,6 @@ export const saveStudentApi = async (formdate) => {
 
 export const getAllStudentsAPi = async () => {
   const response = await axios.get("/students");
-  console.log(response.data);
   return response.data;
 };
 

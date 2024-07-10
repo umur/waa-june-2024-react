@@ -5,6 +5,7 @@ import {
   saveStudentApi,
 } from "../Service/apiService";
 import StudentList from "./StudentList";
+import { useNavigate } from "react-router-dom";
 
 const initialForm = {
   firstName: "",
@@ -20,6 +21,8 @@ const Student = () => {
   const [courseList, setCourseList] = useState([]);
   const [students, setStudents] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllCourses();

@@ -5,6 +5,7 @@ import {
   updateCourseApi,
 } from "../Service/apiService";
 import CourseList from "./CourseList";
+import { Link, useNavigate } from "react-router-dom";
 
 const Course = () => {
   const initialForm = {
@@ -14,15 +15,13 @@ const Course = () => {
   };
   const [courseForm, setCourseForm] = useState(initialForm);
   const [coursesList, setCoursesList] = useState([]);
-  const [showAdd, setShowAdd] = useState(false);
   const [error, setError] = useState(null);
+  const [showEdit, setShowEdit] = useState(false);
 
   const inputCode = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (showAdd) {
-      inputCode.current.focus();
-    }
     fetchCourses();
   }, []);
 
@@ -67,14 +66,10 @@ const Course = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleCourseUpdate = async (event) => {
     event.preventDefault();
-    if (courseForm.id === 0) {
-      await saveCourse();
-    } else {
-      await updateCourse();
-    }
-    setShowAdd(false);
+    await updateCourse();
+    setShowEdit(false);
   };
 
   const resetForm = () => {
@@ -83,11 +78,7 @@ const Course = () => {
   };
 
   const toggle = () => {
-    if (showAdd) {
-      resetForm();
-      inputCode.current.focus();
-    }
-    setShowAdd((prev) => !prev);
+    navigate("/add-course");
   };
 
   return (
@@ -97,10 +88,10 @@ const Course = () => {
         Add Course
       </button>
 
-      {showAdd && (
+      {showEdit && (
         <div>
-          <h2>Course Details</h2>
-          <form onSubmit={handleSubmit}>
+          <h2>Edit Course Details</h2>
+          <form onSubmit={handleCourseUpdate}>
             <div className="mb-3">
               <input
                 type="text"
@@ -124,27 +115,32 @@ const Course = () => {
                 required
               />
             </div>
-            <div className="mb-3">
-              {courseForm.id > 0 ? (
-                <button type="submit" className="btn btn-success">
-                  Update
-                </button>
-              ) : (
-                <button type="submit" className="btn btn-success">
-                  Submit
-                </button>
-              )}
+            <div className="m-3">
+              <button type="submit" className="btn btn-success m-3">
+                Update
+              </button>
+              <button
+                type="submit"
+                className="btn btn-danger"
+                onClick={() => {
+                  navigate("/course");
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>
       )}
 
-      <CourseList
-        coursesList={coursesList}
-        setShowAdd={setShowAdd}
-        setCourseForm={setCourseForm}
-        setCoursesList={setCoursesList}
-      />
+      {!showEdit && (
+        <CourseList
+          coursesList={coursesList}
+          setShowEdit={setShowEdit}
+          setCourseForm={setCourseForm}
+          setCoursesList={setCoursesList}
+        />
+      )}
     </div>
   );
 };

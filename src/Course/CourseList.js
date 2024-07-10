@@ -4,15 +4,15 @@ import { deleteCourseApi } from "../Service/apiService";
 const CourseList = ({
   coursesList,
   setCourseForm,
-  setShowAdd,
+  setShowEdit,
   setCoursesList,
 }) => {
   const editHandler = (id) => {
     if (id) {
+      setShowEdit(true);
       const result = coursesList.find((course) => course.id === id);
       if (result) {
         setCourseForm({ id: result.id, name: result.name, code: result.code });
-        setShowAdd(true);
       }
     }
   };

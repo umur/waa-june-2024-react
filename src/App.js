@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "./App.css";
 import Course from "./Course/Course";
 import Student from "./Student/Student";
+import AddCourse from "./Course/AddCourse";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path="/course" element={<Course />} />
           <Route path="/student" element={<Student />} />
+          <Route path="/add-course" element={<AddCourse />} />
         </Routes>
       </Router>
     </div>
