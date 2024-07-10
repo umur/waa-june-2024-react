@@ -15,3 +15,7 @@ B
 lab7-app/README.md,1/0/10605e1e6431f095c15c15212b32f43443f7b3c0
 H
 lab7-app/src/App.test.js,c/7/c7f74c5765dd7d962eefc57e22be1f9f091dccd7
+L
+lab7-app/src/CreateCourse.js,1/e/1ee29c910cf085670074cdcfc1fddc5e1bc56b59
+M
+lab7-app/src/CreateStudent.js,b/8/b8714ac46c05b69b5dda04584f4ec4dc823c87e4

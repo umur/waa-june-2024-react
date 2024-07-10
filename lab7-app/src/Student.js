@@ -1,7 +1,11 @@
 import React from "react";
 import course from "./Course";
+import axios from "axios";
 
 function Student({students}){
+    const onClickDelete = (id)=>{
+        axios.delete("http://localhost:8080/students/"+id)
+    }
     return (
         <table className="course-table">
             <thead>
@@ -13,6 +17,7 @@ function Student({students}){
                 <th>Major</th>
                 <th>GPA</th>
                 <th>Courses Taken</th>
+                <th></th>
             </tr>
             </thead>
 
@@ -26,6 +31,7 @@ function Student({students}){
                     <td>{student.major}</td>
                     <td>{student.gpa}</td>
                     <td>{student.coursesTaken.map(course=>course.name).join(", ")}</td>
+                    <td><input type="button" value="delete" onClick={()=>onClickDelete(student.id)}/></td>
                 </tr>
             ))}
             </tbody>
