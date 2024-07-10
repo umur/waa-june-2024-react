@@ -6,23 +6,12 @@ import {
 } from "../Service/apiService";
 import StudentList from "./StudentList";
 import { useNavigate } from "react-router-dom";
-
-const initialForm = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  major: "",
-  gpa: "",
-  course: "",
-};
-
+import { initialStudentForm as initialForm } from "../types/types";
 const Student = () => {
   const [studentForm, setStudentForm] = useState(initialForm);
   const [courseList, setCourseList] = useState([]);
   const [students, setStudents] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     getAllCourses();

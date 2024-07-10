@@ -1,13 +1,8 @@
 import React, { useRef, useState } from "react";
 import { saveCourseApi, updateCourseApi } from "../Service/apiService";
 import { useNavigate } from "react-router-dom";
-
+import { initialCourseForm as initialForm } from "../types/types";
 const AddCourse = () => {
-  const initialForm = {
-    id: 0,
-    name: "",
-    code: "",
-  };
   const [courseForm, setCourseForm] = useState(initialForm);
   const [error, setError] = useState(null);
 

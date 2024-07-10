@@ -5,14 +5,9 @@ import {
   updateCourseApi,
 } from "../Service/apiService";
 import CourseList from "./CourseList";
-import { Link, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { initialCourseForm as initialForm } from "../types/types";
 const Course = () => {
-  const initialForm = {
-    id: 0,
-    name: "",
-    code: "",
-  };
   const [courseForm, setCourseForm] = useState(initialForm);
   const [coursesList, setCoursesList] = useState([]);
   const [error, setError] = useState(null);
@@ -42,17 +37,6 @@ const Course = () => {
       ...prevCourseForm,
       [name]: value,
     }));
-  };
-
-  const saveCourse = async () => {
-    try {
-      const data = await saveCourseApi(courseForm);
-      setCoursesList(data);
-      resetForm();
-    } catch (error) {
-      setError("Error saving course");
-      console.error("Error saving course:", error);
-    }
   };
 
   const updateCourse = async () => {
