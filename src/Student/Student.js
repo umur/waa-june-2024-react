@@ -36,7 +36,6 @@ const Student = () => {
   const getAllStudents = async () => {
     try {
       const response = await getAllStudentsAPi();
-      console.log(response);
       setStudents(response);
     } catch (error) {}
   };
@@ -55,7 +54,10 @@ const Student = () => {
       const data = await saveStudentApi(studentForm);
       setStudents(data);
       resetForm();
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error=" + error);
+    }
+    setShowAdd(false);
   };
 
   const resetForm = () => {
@@ -145,7 +147,6 @@ const Student = () => {
                 className="form-control"
                 name="course"
                 onChange={handleChange}
-                multiple
               >
                 <option value="">Select one Course</option>
                 {courseList.map((course) => (

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  getCourseApi,
+  getAllCoursesApi,
   saveCourseApi,
   updateCourseApi,
 } from "../Service/apiService";
@@ -15,24 +15,32 @@ const Course = () => {
   const [courseForm, setCourseForm] = useState(initialForm);
   const [coursesList, setCoursesList] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
+  const [error, setError] = useState(null);
+
+  const inputCode = useRef(null);
 
   useEffect(() => {
+    if (showAdd) {
+      inputCode.current.focus();
+    }
     fetchCourses();
   }, []);
 
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
-      const data = await getCourseApi();
+      const data = await getAllCoursesApi();
       setCoursesList(data);
     } catch (error) {
+      setError("Error fetching courses");
       console.error("Error fetching courses:", error);
     }
-  };
+  });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setCourseForm((prevData) => ({
-      ...prevData,
+
+    setCourseForm((prevCourseForm) => ({
+      ...prevCourseForm,
       [name]: value,
     }));
   };
@@ -41,8 +49,10 @@ const Course = () => {
     try {
       const data = await saveCourseApi(courseForm);
       setCoursesList(data);
+      resetForm();
     } catch (error) {
-      console.error("Error saving courses:", error);
+      setError("Error saving course");
+      console.error("Error saving course:", error);
     }
   };
 
@@ -50,33 +60,39 @@ const Course = () => {
     try {
       const data = await updateCourseApi(courseForm);
       setCoursesList(data);
+      resetForm();
     } catch (error) {
-      console.error("Error updating courses:", error);
+      setError("Error updating course");
+      console.error("Error updating course:", error);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (courseForm.id == 0) {
-      saveCourse();
+    if (courseForm.id === 0) {
+      await saveCourse();
     } else {
-      updateCourse();
+      await updateCourse();
     }
     setShowAdd(false);
-    resetForm();
   };
 
   const resetForm = () => {
     setCourseForm(initialForm);
+    setError(null);
   };
 
   const toggle = () => {
+    if (showAdd) {
+      resetForm();
+      inputCode.current.focus();
+    }
     setShowAdd((prev) => !prev);
   };
 
   return (
     <div className="container">
+      {error && <div className="alert alert-danger">{error}</div>}
       <button type="button" className="btn btn-success m-2" onClick={toggle}>
         Add Course
       </button>
@@ -97,9 +113,6 @@ const Course = () => {
               />
             </div>
             <div className="mb-3">
-              {/* <label htmlFor="code" className="form-label">
-                Course Code
-              </label> */}
               <input
                 type="text"
                 className="form-control"
@@ -107,6 +120,7 @@ const Course = () => {
                 value={courseForm.code}
                 onChange={handleChange}
                 placeholder="Enter Code"
+                ref={inputCode}
                 required
               />
             </div>
@@ -117,7 +131,7 @@ const Course = () => {
                 </button>
               ) : (
                 <button type="submit" className="btn btn-success">
-                  Sumit
+                  Submit
                 </button>
               )}
             </div>
