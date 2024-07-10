@@ -1,53 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import Student from "./components/Student";
 import Course from "./components/Course";
+import axios from "axios";
 
 function App() {
-  const [courses,setCourses] = useState([
-    {
-      "id": 1,
-      "name": "WAA",
-      "code": 545
-    },
-    {
-      "id": 2,
-      "name": "EA",
-      "code": 544
+  const [students, setStudents] = useState([]);
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    fetchStudents();
+    fetchCourses();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/students");
+      setStudents(response.data);
+    } catch (error) {
+      console.error("Error fetching students: ", error);
     }
-  ]);
-  const [students, setStudents] = useState([
-    {
-      "id": 1,
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john@doe.com",
-      "major": "IT",
-      "gpa": 4.0,
-      "coursesTaken": courses
-    },
-    {
-      "id": 2,
-      "firstName": "Eddy",
-      "lastName": "Jim",
-      "email": "eddy@jim.com",
-      "major": "IT",
-      "gpa": 4.0,
-      "coursesTaken": [courses[0]]
+  };
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/courses");
+      setCourses(response.data);
+    } catch (error) {
+      console.error("Error fetching courses", error);
     }
-  ]);
+  };
 
   return (
-    <div className="App">
-      <div>
-        <h2>Student and Course Information</h2>
+      <div className="App">
+        <div>
+          <h2>Student and Course Information</h2>
           <div>
-            <Student students={students}/>
-            <Course courses={courses}/>
+            <Student students={students} fetchStudents={fetchStudents} />
+            <Course courses={courses} />
           </div>
+        </div>
       </div>
-    </div>
   );
 }
 
