@@ -12,8 +12,8 @@ function App() {
           Welcome to Student portal
         </p>
       </header>
-      {/* <Student/> */}
-      <Courses />
+      <Student/>
+      {/* <Courses /> */}
     </div>
   );
 }

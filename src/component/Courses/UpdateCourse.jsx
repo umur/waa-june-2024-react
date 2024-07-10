@@ -17,7 +17,7 @@ import {
     ModalCloseButton,
   } from '@chakra-ui/react';
 
-export default function CreateCourse ({onOpen, onClose, isOpen}) {
+export default function UpdateCourse ({onOpen, onClose, isOpen}) {
     const [state, setState] = useState({
         name: "",
         code: ""
@@ -34,10 +34,10 @@ export default function CreateCourse ({onOpen, onClose, isOpen}) {
         <Modal onClose={onClose} isOpen={isOpen}  size={"xl"} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Create Course</ModalHeader>
+            <ModalHeader>Update Course</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-        <Container maxW='4xl'>
+            <Container maxW='4xl'>
         <FormControl isRequired>
         <FormLabel>Name</FormLabel>
         <Input  id="name" name="name" value={state.name}  onChange={handleOnChange}/>
@@ -45,7 +45,7 @@ export default function CreateCourse ({onOpen, onClose, isOpen}) {
         <Input id="code" name="code" value={state.code} onChange={handleOnChange}/>
         </FormControl>
 
-        </Container>
+    </Container>
             </ModalBody>
             <ModalFooter>
 
@@ -56,10 +56,6 @@ export default function CreateCourse ({onOpen, onClose, isOpen}) {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </>
-
-
- 
-       
+      </>  
 
     )}

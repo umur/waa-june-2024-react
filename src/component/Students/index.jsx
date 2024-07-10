@@ -2,15 +2,19 @@ import React from "react";
 import StudentList from "./StudentList";
 import CreateStudent from "./CreateStudent";
 import {students} from "../../data/data";
-import "./student.css";
+import { Box, useDisclosure, Flex, Button } from "@chakra-ui/react";
 
 export default function Student () {
+  const { isOpen, onOpen, onClose } = useDisclosure()
     return (
-        <div className="student-container">
+        <>
+            <Button bg='green' marginTop={5} p={4} color='white' borderRadius='md' px={4} h={8} w={"130px"} onClick={onOpen}>
+            Add Student
+            </Button>
           <StudentList students={students}/>
-          <CreateStudent />
+          <CreateStudent onOpen={onOpen} onClose={onClose} isOpen={isOpen}/>
       
-        </div>
+        </>
      
     )
   

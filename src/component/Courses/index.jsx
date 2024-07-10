@@ -2,16 +2,19 @@ import React from "react";
 import {courses } from "../../data/data";
 import CreateCourse from "./CreateCourse";
 import CourseList from "./CourseList";
-import "./course.css";
+import { Box, useDisclosure, Flex, Button } from "@chakra-ui/react";
 
-export default function Student () {
+export default function Course () {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
     return (
-        <div className="students">
-            <p className="title">List of Courses</p>
-            {/* <button className="student-create">Add Student</button> */}
-            <CourseList courses={courses}/>
-            <CreateCourse/>
-        </div>
+        <>
+            <Button bg='green' marginTop={5} p={4} color='white' borderRadius='md' px={4} h={8} w={"130px"} onClick={onOpen}>
+            Add Course
+            </Button>
+            <CourseList courses={courses} />
+            <CreateCourse onOpen={onOpen} onClose={onClose} isOpen={isOpen}/>
+         </>
      
     )
   

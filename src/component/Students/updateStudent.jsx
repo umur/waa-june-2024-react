@@ -19,7 +19,7 @@ import {
     Select
   } from "@chakra-ui/react"
 
-export default function CreateStudent ({onOpen, onClose, isOpen}) {
+export default function UpdateStudent ({onOpen, onClose, isOpen}) {
     const [state, setState] = useState({
         firstName: "",
         lastName: "",
@@ -39,7 +39,7 @@ export default function CreateStudent ({onOpen, onClose, isOpen}) {
   <Modal onClose={onClose} isOpen={isOpen}  size={"xl"} isCentered>
     <ModalOverlay />
     <ModalContent>
-      <ModalHeader>Create Student</ModalHeader>
+      <ModalHeader>Update Student</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
   <Container maxW='4xl'>
