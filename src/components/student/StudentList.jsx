@@ -1,51 +1,19 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const initialStudents = [
-    {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'student1@example.com',
-        major: 'Computer Science',
-        gpa: 3.8
-    },
-    {
-        id: 2,
-        firstName: 'Jane',
-        lastName: 'Smith',
-        email: 'student2@example.com',
-        major: 'Computer Science',
-        gpa: 3.6
-    },
-    {
-        id: 3,
-        firstName: 'Alice',
-        lastName: 'Johnson',
-        email: 'student3@example.com',
-        major: 'Computer Science',
-        gpa: 3.9
-    },
-    {
-        id: 4,
-        firstName: 'Bob',
-        lastName: 'Brown',
-        email: 'student4@example.com',
-        major: 'Computer Science',
-        gpa: 3.7
-    },
-    {
-        id: 5,
-        firstName: 'Alex',
-        lastName: 'Steven',
-        email: 'student5@example.com',
-        major: 'Computer Science',
-        gpa: 4.0
-    }
-];
-
 const StudentList = () => {
-    const [students, setStudents] = useState(initialStudents);
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/students')
+            .then(response => {
+                setStudents(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     const handleDelete = (id) => {
         const updatedStudents = students.filter(student => student.id !== id);

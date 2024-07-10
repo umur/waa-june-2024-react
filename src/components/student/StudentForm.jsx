@@ -1,8 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function StudentForm() {
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate('/students');
+  };
+
+  const { studentId } = useParams();
+  const [student, setStudent] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    major: '',
+    gpa: '',
+  });
+
+  useEffect(() => {
+    if (studentId) {
+      const fetchStudentDetails = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3001/students/${studentId}`);
+          setStudent(response.data);
+        } catch (error) {
+          console.error('Error fetching course details:', error);
+        }
+      };
+
+      fetchStudentDetails();
+    }
+  }, [studentId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setStudent((prevStudent) => ({
+      ...prevStudent,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (studentId) {
+        // Update existing student
+        await axios.put(`http://localhost:3001/students/${studentId}`, student);
+      } else {
+        // Create new student
+        await axios.post('http://localhost:3001/students', student);
+      }
+    } catch (error) {
+      console.error('Error saving student:', error);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold leading-7 text-gray-900">Student Information</h2>
@@ -15,9 +70,10 @@ function StudentForm() {
               <div className="mt-2">
                 <input
                   id="first-name"
-                  name="first-name"
+                  name="firstName"
                   type="text"
-                  autoComplete="given-name"
+                  value={student.firstName}
+                  onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -30,9 +86,10 @@ function StudentForm() {
               <div className="mt-2">
                 <input
                   id="last-name"
-                  name="last-name"
+                  name="lastName"
                   type="text"
-                  autoComplete="family-name"
+                  value={student.lastName}
+                  onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -47,7 +104,8 @@ function StudentForm() {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
+                  value={student.email}
+                  onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -62,7 +120,8 @@ function StudentForm() {
                   id="major"
                   name="major"
                   type="text"
-                  autoComplete="major"
+                  value={student.major}
+                  onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -77,7 +136,8 @@ function StudentForm() {
                   id="gpa"
                   name="gpa"
                   type="text"
-                  autoComplete="address-level2"
+                  value={student.gpa}
+                  onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -87,7 +147,7 @@ function StudentForm() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+        <button type="button" onClick={handleBack} className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
         </button>
         <button

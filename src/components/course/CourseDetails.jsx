@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function CourseDetails() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
 
   useEffect(() => {
-    // Fetch course details from a data source using the courseId
-    // This is a placeholder for the actual data fetching logic
     const fetchCourseDetails = async () => {
-      // Replace with actual data fetching logic
-      const courseData = {
-        id: courseId,
-        name: 'Sample Course',
-        code: 'CS101',
-      };
-      setCourse(courseData);
+      try {
+        const response = await axios.get(`http://localhost:3001/courses/${courseId}`);
+        setCourse(response.data);
+      } catch (error) {
+        console.error('Error fetching course details:', error);
+      }
     };
 
     fetchCourseDetails();

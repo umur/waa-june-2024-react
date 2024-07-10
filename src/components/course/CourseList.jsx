@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-const initialCourses = [
-  { id: '1', name: 'MPP', code: 'CS401' },
-  { id: '2', name: 'WAP', code: 'CS472' },
-  { id: '3', name: 'WAA', code: 'CS545' },
-  { id: '4', name: 'Software Engineering', code: 'CS425' },
-  { id: '5', name: 'Algorithms', code: 'CS435' }
-];
+import axios from 'axios';
 
 function CourseList() {
-  const [courses, setCourses] = useState(initialCourses);
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from json-server
+    axios.get('http://localhost:3001/courses')
+      .then(response => {
+        setCourses(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []); // Empty dependency array to run only once
 
   const handleDelete = (courseId) => {
     const updatedCourses = courses.filter(course => course.id !== courseId);

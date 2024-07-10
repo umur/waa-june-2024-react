@@ -1,44 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function StudentDetails() {
   const { studentId } = useParams();
   const [student, setStudent] = useState(null);
 
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate('/students');
-  };
-
   useEffect(() => {
-    // Fetch student details from API
-    fetch(`http://yourapi/students/${studentId}`)
-      .then((response) => response.json())
-      .then((data) => setStudent(data))
-      .catch((error) => console.error('Error fetching student details:', error));
-  }, [studentId]);
+    const fetchStudentDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/students/${studentId}`);
+        setStudent(response.data);
+      } catch (error) {
+        console.error('Error fetching student details:', error);
+      }
+    };
 
-  const handleDelete = () => {
-    // API call to delete student
-    fetch(`http://yourapi/students/${studentId}`, { method: 'DELETE' })
-      .then(() => {
-        alert('Student deleted successfully');
-        navigate('/add-student'); // Redirect to student list
-      })
-      .catch((error) => console.error('Error deleting student:', error));
-  };
+    fetchStudentDetails();
+  }, [studentId]);
 
   if (!student) return <div>Loading...</div>;
 
   return (
     <div>
       <h2>{student.firstName} {student.lastName}</h2>
-      <p>Major: {student.major}</p>
-      <p>GPA: {student.gpa}</p>
-      {/* Add link to edit page */}
-      <button onClick={handleDelete} className="bg-red-500 text-white p-2 rounded">Delete</button>
-      <button onClick={handleBack}>Back to Student List</button>
+      <p><strong>Email:</strong> {student.email}</p>
+      <p><strong>Major:</strong> {student.major}</p>
+      <p><strong>GPA:</strong> {student.gpa}</p>
+      <h3><strong>Courses Taken:</strong> </h3>
+      <ul>
+        {student.coursesTaken.map(course => (
+          <li key={course.id}>{course.code} - {course.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }

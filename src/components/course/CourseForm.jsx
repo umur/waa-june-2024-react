@@ -1,9 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function CourseForm() {
+  const [course, setCourse] = useState({ code: '', name: '' });
+  const { courseId } = useParams();
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate('/courses');
+  };
+
+  useEffect(() => {
+    // Fetch course details if courseId is provided
+    if (courseId) {
+      const fetchCourseDetails = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3001/courses/${courseId}`);
+          setCourse(response.data);
+        } catch (error) {
+          console.error('Error fetching course details:', error);
+        }
+      };
+
+      fetchCourseDetails();
+    }
+  }, [courseId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCourse({ ...course, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (courseId) {
+        // Update existing course
+        await axios.put(`http://localhost:3001/courses/${courseId}`, course);
+      } else {
+        // Create new course
+        await axios.post('http://localhost:3001/courses', course);
+      }
+    } catch (error) {
+      console.error('Error saving course:', error);
+    }
+  };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold leading-7 text-gray-900">Course Information</h2>
@@ -18,7 +64,8 @@ function CourseForm() {
                   id="name"
                   name="name"
                   type="text"
-                  autoComplete="given-name"
+                  value={course.name}
+                  onChange={handleInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -33,7 +80,8 @@ function CourseForm() {
                   id="code"
                   name="code"
                   type="text"
-                  autoComplete="family-name"
+                  value={course.code}
+                  onChange={handleInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -43,7 +91,7 @@ function CourseForm() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+        <button type="button" onClick={handleBack} className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
         </button>
         <button
