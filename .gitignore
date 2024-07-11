@@ -1,0 +1,26 @@
+# Dependency directories
+/node_modules
+
+# Production build directory
+/build
+
+# Coverage directory
+/coverage
+
+# Environment variables file
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories and files
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS directories
+.DS_Store
+Thumbs.db
