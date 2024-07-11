@@ -6,6 +6,7 @@ import PersonDetail from "./PersonDetail";
 import CreatePerson from "./CreatePerson";
 import Courses from "./Courses";
 import CourseDetail from "./CourseDetail";
+import CreateCourse from "./CreateCourse";
 
 function App() {
   return (
@@ -15,18 +16,22 @@ function App() {
           <Link to="students">Students</Link>
         </li>
         <li>
-          <Link to="/create-person">New Student</Link>
+          <Link to="/create-student">New Student</Link>
         </li>
         <li>
           <Link to="/courses">Courses</Link>
         </li>
+        <li>
+          <Link to="/create-course">New Course</Link>
+        </li>
       </ul>
 
       <Routes>
-        <Route path="/persons" element={<Persons />} />
-        <Route path="/create-person/" element={<CreatePerson />} />
+        <Route path="/students" element={<Persons />} />
+        <Route path="/create-student/" element={<CreatePerson />} />
         <Route path="/person-detail/:id" element={<PersonDetail />} />
         <Route path="/courses" element={<Courses />} />
+        <Route path="/create-course/" element={<CreateCourse />} />
         <Route path="/course-detail/:id" element={<CourseDetail />} />
       </Routes>
     </div>
