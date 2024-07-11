@@ -10,16 +10,18 @@ import {
     Text,
     Container,
     Button,
-    useDisclosure
+    useDisclosure,
+    LinkBox,
+    LinkOverlay
   } from '@chakra-ui/react';
-  import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
+  import {DeleteIcon, EditIcon, InfoIcon} from "@chakra-ui/icons";
 import UpdateStudent from "./updateStudent";
 
 export default function StudentList ({students}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
-          <Container maxW='4xl'>
+    <Container maxW='4xl'>
      <Text fontSize='4xl' margin={10}>List of Students</Text>
         <TableContainer>
         <Table variant='striped' colorScheme='teal'>
@@ -28,7 +30,7 @@ export default function StudentList ({students}) {
                 <Th>#</Th>
                 <Th  fontSize='xl'>First Name</Th>   
                 <Th  fontSize='xl'>Last Name</Th>
-                <Th  fontSize='xl'>Email</Th>
+                <Th></Th>
                 <Th></Th>
                 <Th></Th>
             </Tr>
@@ -40,9 +42,9 @@ export default function StudentList ({students}) {
                 <Td>{student.id}</Td>
                 <Td>{student.firstName}</Td>
                 <Td>{student.lastName}</Td>
-                <Td>{student.email}</Td>
-                <Td><Button onClick={onOpen}> <EditIcon w={5} h={5} color="green.500" /></Button></Td>
-                <Td> <DeleteIcon w={5} h={5} color="red.500" /></Td>
+                <Td> <EditIcon onClick={onOpen} w={5} h={5} color="green.500" cursor={"pointer"}/></Td>
+                <Td> <DeleteIcon w={5} h={5} color="red.500" cursor={"pointer"}/></Td>
+                <Td> <InfoIcon w={5} h={5} color="green.700" cursor={"pointer"}/></Td>
                 </Tr>
                 ))
                 }

@@ -1,31 +1,23 @@
-import logo from './aaaaa-logo.jpg';
+import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Student from './component/Students';
 import Courses from './component/Courses';
 import ApiClient from "../src/services/api-client";
-import { useEffect, useState } from 'react';
+import NavBar from './component/common/NavBar';
+import CourseDetail from "./component/Courses/CourseDetails";
 
 function App() {
-  const [courses, setCourses] = useState();
-  const apiClient = new ApiClient("/courses");
-
-  useEffect( () => {
-    getAllCourses()
-  }, [])
-  const getAllCourses = async () => {
-    return await apiClient.getAll()
-  }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome to Student portal
-        </p>
-      </header>
-      <Student/>
-      {/* <Courses /> */}
+     <NavBar/>
+
+      <Routes>
+        <Route path="/" element={<Student />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/course-detail/:id" element={<CourseDetail />} />
+      </Routes>
     </div>
   );
 }

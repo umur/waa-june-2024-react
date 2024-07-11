@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {
     FormControl,
     FormLabel,
@@ -17,16 +17,8 @@ import {
     ModalCloseButton,
   } from '@chakra-ui/react';
 
-export default function CreateCourse ({onOpen, onClose, isOpen}) {
-    const [state, setState] = useState({
-        name: "",
-        code: ""
-    })
+export default function CreateCourse ({onOpen, onClose, isOpen, onChange, onSubmit, state}) {
 
-    const handleOnChange = (e) => {
-        setState({...state, [e.target.name]: e.target.value})
-
-    }
     return (
 
         <>
@@ -39,17 +31,22 @@ export default function CreateCourse ({onOpen, onClose, isOpen}) {
             <ModalBody>
         <Container maxW='4xl'>
         <FormControl isRequired>
+        <FormLabel>Course Id</FormLabel>
+        <Input  id="id" name="id" value={state.id}  onChange={onChange}/>
         <FormLabel>Name</FormLabel>
-        <Input  id="name" name="name" value={state.name}  onChange={handleOnChange}/>
+        <Input  id="name" name="name" value={state.name}  onChange={onChange}/>
         <FormLabel marginTop={5}>Code</FormLabel>
-        <Input id="code" name="code" value={state.code} onChange={handleOnChange}/>
+        <Input id="code" name="code" value={state.code} onChange={onChange}/>
         </FormControl>
 
         </Container>
             </ModalBody>
             <ModalFooter>
 
-        <Button colorScheme='teal' variant='outline' marginTop={5}>
+        <Button colorScheme='teal' variant='outline' marginTop={5} onClick={ () => {
+            onSubmit();
+            onClose();
+        }}>
             Submit
         </Button>
               <Button onClick={onClose}>Close</Button>

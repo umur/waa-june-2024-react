@@ -36,6 +36,11 @@ class ApiClient {
     const res = await axiosInstance.put(`${this.endpoint}`, data);
     return res.data;
   }
+
+  delete = async(id) =>{
+    const res = await axiosInstance.delete(`${this.endpoint}/${id}`);
+    return res.data;
+  }
 }
 
 export default ApiClient;
