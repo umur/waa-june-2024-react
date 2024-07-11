@@ -1,17 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AddButtom from './AddButtom';
+import axios, {get} from "axios";
+import {useNavigate} from "react-router";
 import './Table.css';
+import { Link } from "react-router-dom";
 
 const App = () => {
-    const data = [
-        { fname: "Anom", lname: "Pa", email: "aa@gmail.com", major: "MM", gpa: 4 },
-        { fname: "Penon", lname: "Sa", email: "bb@gmail.com", major: "MM", gpa: 4.1 },
-        { fname: "Tom", lname: "Ga", email: "cc@gmail.com", major: "MM", gpa: 3.8 }
-    ]
+
+    const navigate = useNavigate();
+    const data = []
+
+    const [dataState, setDataState] = useState(data);
+
+    const getAllStudents = async()=>{
+        const result= await axios.get("http://localhost:8080/persons");
+        setDataState(result.data);
+    }
+
+    useEffect(()=>{
+        getAllStudents();
+    },[]);
+
+    const addStudentForm =() =>{
+        console.log("Route Change");
+        navigate("/AddStudent")
+    }
+
+    const deleteStudent= (id) =>{
+        console.log("Delete Id:"+id);
+        axios.delete("http://localhost:8080/persons/"+id);
+        // window.location.reload();
+        navigate("/Student");
+    }
 
     return (
         <><h1>Student List</h1>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '5%' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '5%' }} onClick={()=> addStudentForm()}>
                 <AddButtom />
             </div>
             <br />
@@ -25,7 +49,7 @@ const App = () => {
                         <th>GPA</th>
                         <th>Action</th>
                     </tr>
-                    {data.map((val, key) => {
+                    {dataState.map((val, key) => {
                         return (
                             <tr key={key}>
                                 <td>{val.fname}</td>
@@ -33,7 +57,7 @@ const App = () => {
                                 <td>{val.email}</td>
                                 <td>{val.major}</td>
                                 <td>{val.gpa}</td>
-                                <td></td>
+                                <td><p onClick={()=>deleteStudent(val.id)} style={{color:'red'}}><u>Delete</u></p></td>
                             </tr>
                         );
                     })}
