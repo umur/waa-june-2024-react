@@ -56,3 +56,30 @@ th, td {
 th {
   background-color: #f2f2f2;
 }
+
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff; /* Example background color */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Example shadow for depth */
+}
+
+.sticky-nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sticky-nav li {
+  float: left;
+}
+
+.sticky-nav li a {
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}

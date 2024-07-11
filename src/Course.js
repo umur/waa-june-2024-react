@@ -1,7 +1,6 @@
 import React from 'react';
 
 export function Course(props) {
-    //return table with course name and course code and table show in center
 
     return (
         

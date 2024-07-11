@@ -1,29 +1,13 @@
-import React from "react";
-import { useState } from "react";
-import { Course } from "./Course";
+import React, {useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 
 export function Student(props) {
 
+    const navigate = useNavigate();
 
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
-
-    const onClickHandler = () => {
-        setIsPopupVisible(!isPopupVisible);
+    const goToCourseDetail = () => {
+        navigate(`/coursedetail/${props.id}`);
     };
-
-    // Popup component for displaying courses in a table
-  const CoursesPopup = () => (
-    <div style={{ display: isPopupVisible ? 'block' : 'none' }}>
-      <h2>Courses List</h2>
-    {
-      props.courses.map((course) => {
-          return <Course key={course.id} name={course.name} code={course.code} />
-        })
-    }
-
-    </div>
-  );
-
 
     return (
         <div>
@@ -35,7 +19,7 @@ export function Student(props) {
                     <th>Email</th>
                     <th>Major</th>
                     <th>GPA</th>
-                    <th>Course</th>
+                    <th>Detail</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,11 +29,10 @@ export function Student(props) {
                     <td>{props.email}</td>
                     <td>{props.major}</td>
                     <td>{props.gpa}</td>
-                    <td><button onClick={onClickHandler}>Show Courses</button></td>
+                    <td><button onClick={goToCourseDetail}>Show Courses</button></td>
                 </tr>
             </tbody>
         </table>
-        <CoursesPopup />
         </div>
 
 
