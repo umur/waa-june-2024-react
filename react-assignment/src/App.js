@@ -1,34 +1,41 @@
 import logo from './logo.svg';
 import './App.css';
+import { Route,Routes } from 'react-router';
 import Course from "./Course";
 import ToggleList from "./ToggleList";
+import TestRoute from './TestRoute';
+import Person from "./Person";
+import {useEffect, useState} from "react";
+import axios, {get} from "axios";
+import CreatePerson from "./CreatePerson";
+import {Link} from "react-router-dom";
+import AddPerson from "./AddPerson";
+import PersonDetail from "./PersonDetail";
+import Persons from "./Persons";
 
-const courseList =[
-  {id:1 , courseName: 'WAP', credit: '400',courseCode:"CSS-420"},
-  {id:2 , courseName: 'WAA', credit: '500',courseCode:"CSS-520"},
-  {id:3 , courseName: 'EA', credit: '500',courseCode:"CSS-530"},
-  {id:4 , courseName: 'ASD', credit: '500',courseCode:"CSS-523"}
-]
-function App() {
-  return (
-      <div className="App">
-        <ToggleList/>
-        <table>
-          {
-            courseList.map((item)=>{
-              return (
-                  <Course
-                      id={item.id}
-                      courseName={item.courseName}
-                      credit={item.credit}
-                      courseCode={item.courseCode}
-                  />
-              )
-            })
-          }
-        </table>
-      </div>
-  );
+function App(){
+    return(
+        <div className="App">
+            <ul>
+                <li>
+                    <Link to="/persons"> Person List </Link>
+                </li>
+                <li>
+                    <Link to="/add"> Create Person </Link>
+                </li>
+                <li>
+                    <Link to="/detail">Person Detail </Link>
+                </li>
+            </ul>
+
+            <Routes>
+                <Route path="/persons" element={<Persons />}/>
+                <Route path="/add" element={<CreatePerson />}/>
+                <Route path="/detail/:personid" element={<PersonDetail />}/>
+            </Routes>
+
+        </div>
+    )
 }
 
 export default App;
