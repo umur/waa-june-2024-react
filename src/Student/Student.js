@@ -7,6 +7,7 @@ import {
 import StudentList from "./StudentList";
 import { useNavigate } from "react-router-dom";
 import { initialStudentForm as initialForm } from "../types/types";
+import { data } from "jquery";
 const Student = () => {
   const [studentForm, setStudentForm] = useState(initialForm);
   const [courseList, setCourseList] = useState([]);
@@ -41,6 +42,8 @@ const Student = () => {
   };
 
   const handleSubmit = async (event) => {
+    console.log(studentForm);
+
     event.preventDefault();
     try {
       const data = await saveStudentApi(studentForm);

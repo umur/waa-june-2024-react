@@ -1,20 +1,29 @@
 import React from "react";
 import { deleteCourseApi } from "../Service/apiService";
+import { useNavigate } from "react-router-dom";
 
 const CourseList = ({
   coursesList,
   setCourseForm,
-  setShowEdit,
+  setEditMode,
   setCoursesList,
+  openModal,
 }) => {
+  const navigate = useNavigate();
+
   const editHandler = (id) => {
     if (id) {
-      setShowEdit(true);
+      setEditMode(true);
       const result = coursesList.find((course) => course.id === id);
       if (result) {
         setCourseForm({ id: result.id, name: result.name, code: result.code });
+        openModal(true);
       }
     }
+  };
+
+  const handleMoreDetails = (id) => {
+    navigate("/courses/course-details/" + id);
   };
 
   const deleteHandler = async (id) => {
@@ -43,9 +52,16 @@ const CourseList = ({
         <tbody>
           {coursesList.map((data, index) => (
             <tr key={data.id}>
-              <td scope="row">{index + 1}</td>
+              <td>{index + 1}</td>
               <td>{data.name}</td>
-              <td>{data.code}</td>
+              <td
+                onClick={() => {
+                  handleMoreDetails(data.id);
+                }}
+              >
+                More
+                <>{data.code}</>
+              </td>
               <td
                 className="btn btn-sm btn-success m-1"
                 onClick={() => editHandler(data.id)}

@@ -7,18 +7,24 @@ import {
 import CourseList from "./CourseList";
 import { useNavigate } from "react-router-dom";
 import { initialCourseForm as initialForm } from "../types/types";
+import * as bootstrap from "bootstrap/dist/js/bootstrap.min.js";
+import CourseModal from "./CourseModal";
+
 const Course = () => {
   const [courseForm, setCourseForm] = useState(initialForm);
   const [coursesList, setCoursesList] = useState([]);
   const [error, setError] = useState(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
+  const modalRef = useRef(null);
   const inputCode = useRef(null);
   const navigate = useNavigate();
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [refresh]);
 
   const fetchCourses = useCallback(async () => {
     try {
@@ -28,7 +34,7 @@ const Course = () => {
       setError("Error fetching courses");
       console.error("Error fetching courses:", error);
     }
-  });
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -39,21 +45,26 @@ const Course = () => {
     }));
   };
 
-  const updateCourse = async () => {
+  const handleCourseSave = async (event) => {
+    event.preventDefault();
     try {
-      const data = await updateCourseApi(courseForm);
-      setCoursesList(data);
+      const data = await saveCourseApi(courseForm);
+      setRefresh(!refresh);
+
+      if (modalRef.current) {
+        const modalElement = modalRef.current;
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        const backdrop = document.querySelector(".modal-backdrop");
+        if (backdrop) {
+          backdrop.remove();
+          modalInstance.hide();
+        }
+      }
       resetForm();
     } catch (error) {
-      setError("Error updating course");
-      console.error("Error updating course:", error);
+      setError("Error saving course");
+      console.error("Error saving course:", error);
     }
-  };
-
-  const handleCourseUpdate = async (event) => {
-    event.preventDefault();
-    await updateCourse();
-    setShowEdit(false);
   };
 
   const resetForm = () => {
@@ -61,70 +72,54 @@ const Course = () => {
     setError(null);
   };
 
-  const toggle = () => {
-    navigate("/add-course");
+  const openModal = (editMode = false) => {
+    setEditMode(editMode);
+    if (modalRef.current) {
+      const modalElement = modalRef.current;
+      const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+      bootstrapModal.show();
+    }
+  };
+
+  const closeModal = () => {
+    if (modalRef.current) {
+      const modalElement = modalRef.current;
+      const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+      if (bootstrapModal) {
+        bootstrapModal.hide();
+      }
+    }
   };
 
   return (
     <div className="container">
-      {error && <div className="alert alert-danger">{error}</div>}
-      <button type="button" className="btn btn-success m-2" onClick={toggle}>
-        Add Course
-      </button>
+      {error && <div className="alert alert-danger mt-2">{error}</div>}
 
-      {showEdit && (
-        <div>
-          <h2>Edit Course Details</h2>
-          <form onSubmit={handleCourseUpdate}>
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                value={courseForm.name}
-                onChange={handleChange}
-                placeholder="Enter Course"
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                name="code"
-                value={courseForm.code}
-                onChange={handleChange}
-                placeholder="Enter Code"
-                ref={inputCode}
-                required
-              />
-            </div>
-            <div className="m-3">
-              <button type="submit" className="btn btn-success m-3">
-                Update
-              </button>
-              <button
-                type="submit"
-                className="btn btn-danger"
-                onClick={() => {
-                  navigate("/course");
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+        <button
+          type="button"
+          className="btn btn-primary mt-3"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+          onClick={() => openModal()}
+        >
+          Add Course
+        </button>
 
-      {!showEdit && (
+        <CourseModal courseForm={courseForm}
+          handleCourseSave={handleCourseSave}
+          handleChange={handleChange}
+          modalRef={modalRef}
+          editMode={editMode}
+        />
+
         <CourseList
           coursesList={coursesList}
-          setShowEdit={setShowEdit}
+          setEditMode={setEditMode}
           setCourseForm={setCourseForm}
           setCoursesList={setCoursesList}
+          openModal={openModal}
+          closeModal={closeModal}
         />
-      )}
     </div>
   );
 };
