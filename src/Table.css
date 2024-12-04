@@ -1,0 +1,22 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.bordered-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bordered-table th,
+.bordered-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.bordered-table th {
+    background-color: #f2f2f2;
+}
